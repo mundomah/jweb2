@@ -2,7 +2,11 @@ package com.htcursos.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -10,14 +14,18 @@ import org.hibernate.validator.constraints.NotEmpty;
 public class Usuario {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	@NotEmpty
 	private String nome;
 	@NotEmpty
-	@Column(unique=true)
+	@Column(unique = true)
 	private String login;
 	@NotEmpty
 	private String senha;
+	@JoinColumn
+	@ManyToOne
+	private Perfil perfil;
 
 	public Long getId() {
 		return id;
@@ -51,6 +59,14 @@ public class Usuario {
 		this.senha = senha;
 	}
 
+	public Perfil getPerfil() {
+		return perfil;
+	}
+
+	public void setPerfil(Perfil perfil) {
+		this.perfil = perfil;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -58,6 +74,7 @@ public class Usuario {
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((login == null) ? 0 : login.hashCode());
 		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
+		result = prime * result + ((perfil == null) ? 0 : perfil.hashCode());
 		result = prime * result + ((senha == null) ? 0 : senha.hashCode());
 		return result;
 	}
@@ -86,6 +103,11 @@ public class Usuario {
 				return false;
 		} else if (!nome.equals(other.nome))
 			return false;
+		if (perfil == null) {
+			if (other.perfil != null)
+				return false;
+		} else if (!perfil.equals(other.perfil))
+			return false;
 		if (senha == null) {
 			if (other.senha != null)
 				return false;
@@ -96,7 +118,8 @@ public class Usuario {
 
 	@Override
 	public String toString() {
-		return "Usuario [id=" + id + ", nome=" + nome + ", login=" + login + ", senha=" + senha + "]";
+		return "Usuario [id=" + id + ", nome=" + nome + ", login=" + login + ", senha=" + senha + ", perfil=" + perfil
+				+ "]";
 	}
 
 }
